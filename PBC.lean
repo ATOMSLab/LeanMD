@@ -46,6 +46,34 @@ unbounded environment.-/
 def apply_pbc (p c : α) : α :=
  p - c * round (p / c)
 
+/- This theorem establishes that the periodic boundary condition (PBC) operation ensures the wrapped distance of 
+any value 𝑥 within a cell of length 𝐿 > 0 is bounded by 𝐿/2. It guarantees that distances computed under PBC are 
+minimal and consistent, a crucial property for simulations with periodic systems.-/
+
+theorem abs_pbc_le (x L : ℝ) (hL : 0 < L) : |pbc x L| ≤ L / 2 := by
+  dsimp [pbc]
+  have : |(x / L) - round (x / L)| ≤ 1 / 2 := abs_diff_round_le_half (x / L)
+  calc
+    |x - L * round (x / L)| = |L * ((x / L) - round (x / L))| := by field_simp
+    _ = |L| * |(x / L) - round (x / L)| := by rw [abs_mul]
+    _ = L * |(x / L) - round (x / L)| := by rw [abs_of_pos hL]
+    _ ≤ L * (1 / 2) := mul_le_mul_of_nonneg_left this (by linarith)
+    _ = L / 2 := by ring
+
+/- This theorem proves that the periodic boundary condition (PBC) operation is invariant under translations by 
+integer multiples of the cell length 𝐿 when 𝐿 ≠ 0. It ensures that subtracting 𝑘⋅𝐿 from 𝑥 does not affect the 
+wrapped result, highlighting the periodicity and consistency of the PBC operation.-/
+
+theorem pbc_periodic (x L : ℝ) (k : ℤ) (hL : L ≠ 0) : pbc (x - k * L) L = pbc x L := by
+  dsimp [pbc]
+  have : round ((x - k * L) / L) = round (x / L - k) := by
+    congr
+    field_simp
+    ring
+  rw [this, round_sub_int]
+  rw [Int.cast_sub, mul_sub]
+  ring
+
 theorem apply_pbc_le_box_length (p c : α) (h1 : 0 < c) : apply_pbc p c < c := by
   dsimp only [apply_pbc]
   by_cases h : p / c ≤ round (p / c)
