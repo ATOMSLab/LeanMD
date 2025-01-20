@@ -5,7 +5,7 @@ Authors: Ejike Ugwuanyi
 import Mathlib
 
 
-noncomputable def pbc (position box_length : ℝ) : ℝ :=  position - cell_length * round (position / box_length)
+noncomputable def pbc (position box_length : ℝ) : ℝ :=  position - box_length * round (position / box_length)
 
 
 noncomputable def minImageDistance (box_length posA posB : Fin n → ℝ) : ℝ :=
