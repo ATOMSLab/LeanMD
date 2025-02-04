@@ -4,7 +4,6 @@ Authors: Ejike Ugwuanyi
 
 import Mathlib
 
-
 noncomputable def pbc (position box_length : ℝ) : ℝ :=  position - box_length * round (position / box_length)
 
 
