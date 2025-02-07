@@ -1,0 +1,8 @@
+
+*.lean
+.lake/packages/mathlib/
+.lake/packages/importGraph/
+.lake/packages/Cli/
+.lake/packages/proofwidgets/
+.lake/packages/Qq/
+.lake/packages/batteries/

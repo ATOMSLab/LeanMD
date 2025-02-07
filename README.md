@@ -5,7 +5,7 @@ It is built using the Lean Functional Programming Language and Theorem Prover. L
 calculation and simulation step is grounded in proven mathematics. The vision behind LeanMD is to help scientists and researchers run simulations 
 they can fully trust, knowing that each part has been rigorously checked for correctness.
 
-# Goals of LeanMD
+## Goals of LeanMD
 + ***Mathematically Verified Simulations:*** LeanMD’s core focus is on verifying every calculation involved in MD simulations, including foundational
 equations like Newton's laws of motion and energy conservation. Unlike conventional simulations, which rely on approximations, LeanMD formalizes these
 equations in Lean, ensuring each step adheres strictly to mathematical principles. This precision greatly reduces the risk of computational errors, leading
@@ -20,10 +20,13 @@ verified computing. Through its open-source library, LeanMD offers access to ver
 
 + ***Automation with AI:*** Looking to the future, LeanMD plans to incorporate AI tools, such as large language models (LLMs), to help automate some of the more complex proof steps. This addition could make it faster and easier to explore new scientific theories, validate findings, and possibly even generate new insights automatically. By integrating AI, LeanMD aims to keep up with the latest advancements, making proof generation and validation quicker and more efficient.
 
-# Impact and Vision
+## Impact and Vision
 LeanMD is setting a new standard in molecular dynamics simulations by ensuring that each simulation is backed by solid, error-checked mathematics. By 
 creating a trustworthy, verified approach to scientific computing, LeanMD is helping researchers run simulations confidently. LeanMD aims to improve the 
 quality and reliability of scientific software, paving the way for discoveries grounded in accurate, proven calculations.
+
+## Lean Installation
+### Refer to [Lean-Installation.md](Lean-Installation.md)
 
 
 
