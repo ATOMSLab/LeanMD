@@ -169,7 +169,7 @@ lemma differentiable_pow6_div (σ : ℝ) (hr : ∀ x : ℝ, x > 0) :
     exact absurd hx (ne_of_gt h_pos)
 
 
-noncomputable def Ljp  (r r_c ε σ  : ℝ) : ℝ :=
+noncomputable def ljp  (r r_c ε σ  : ℝ) : ℝ :=
   if r ≤ r_c then
     let r6 := (σ / r) ^ 6
     let r12 := r6 ^ 2
@@ -178,15 +178,15 @@ noncomputable def Ljp  (r r_c ε σ  : ℝ) : ℝ :=
     0
 
 theorem cutoff_behavior (r r_c ε σ : ℝ)
-    (h : r > r_c) : Ljp r r_c ε σ = 0 := by
+    (h : r > r_c) : ljp r r_c ε σ = 0 := by
   unfold Ljp
   simp [if_neg (not_le_of_gt h)]
 
 
 theorem ljp_zero_on_tail (r_c ε σ : ℝ) :
-  ∀ r, r > r_c → Ljp r r_c ε σ = 0 := by
+  ∀ r, r > r_c → ljp r r_c ε σ = 0 := by
   intro r h
-  unfold Ljp
+  unfold ljp
   simp only [if_neg (not_le_of_gt h)]
 
 
@@ -198,11 +198,11 @@ theorem ljp_eq_le {r_c ε σ : ℝ} :
   rw [if_pos h_r_le_rc]
   ring
 
-theorem ljp_eq_gt : ∀ r ∈ {r | r > r_c ∧ r > 0}, Ljp r r_c ε σ = 0 := by
+theorem ljp_eq_gt : ∀ r ∈ {r | r > r_c ∧ r > 0}, ljp r r_c ε σ = 0 := by
   intro r hr
   have h_r_gt_rc : r > r_c := hr.1
   have h_r_pos : r > 0 := hr.2
-  unfold Ljp
+  unfold ljp
   rw [if_neg (not_le_of_gt h_r_gt_rc)]
 
 
