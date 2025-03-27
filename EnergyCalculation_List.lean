@@ -132,7 +132,7 @@ def vectorNorm (vector : List Float) : Float :=
   (vector.foldr (λ x acc => x ^ 2 + acc) 0.0).sqrt
 
 /-- Lennard-Jones potential function -/
-def lennard_jones_potential (r : Float) (cutoff : Float) (epsilon : Float) (sigma : Float) : Float :=
+def ljp (r : Float) (cutoff : Float) (epsilon : Float) (sigma : Float) : Float :=
   if r ≤ cutoff then
     let r6 := (sigma / r) ^ 6
     let r12 := r6 * r6
@@ -153,7 +153,7 @@ def compute_energy (positions : List (List Float)) (cell_length : List Float) (c
       let r_ij1 := apply_pbc r_ij cell_length
       let r_ij2 := minimum_image_distance r_ij1 cell_length
       let distance := vectorNorm r_ij2
-      let energy_contrib := lennard_jones_potential distance cutoff epsilon sigma
+      let energy_contrib := ljp distance cutoff epsilon sigma
       energy i (j - 1) (accumulated_energy + energy_contrib)
   energy num_atoms (num_atoms - 1) 0.0
 
