@@ -57,21 +57,3 @@ noncomputable def pairwiseEnergy (positions : List (Fin n → ℝ))
       acc + innerSum
     )
     0.0
-
-
-theorem compute_total_energy_eq_double_sum
-  (positions : List (Fin n → ℝ))
-  (cell_length : Fin n → ℝ)
-  (cutoff epsilon sigma : ℝ)
-  : total_energy positions cell_length cutoff epsilon sigma
-    = ∑ i in Finset.range positions.length,
-        ∑ j in Finset.range i,
-          Ljp (minImageDistance cell_length (positions.get! i) (positions.get! j))
-              cutoff epsilon sigma := by sorry
-
-theorem energyConsistency
-  (positions : List (Fin n → ℝ))
-  (box_length : Fin n → ℝ)
-  (cutoff epsilon sigma : ℝ)
-  : total_energy positions box_length cutoff epsilon sigma
-    = pairwiseEnergy positions box_length cutoff epsilon sigma := by sorry
