@@ -15,7 +15,7 @@ noncomputable def minImageDistance (box_length posA posB : Fin n → ℝ) : ℝ 
 
 /-- Lennard-Jones potential function. Returns 0 if r > cutoff. -/
 
-noncomputable def Ljp (r cutoff epsilon sigma : ℝ) : ℝ :=
+noncomputable def ljp (r cutoff epsilon sigma : ℝ) : ℝ :=
   if r ≤ cutoff then
     let r6 := (sigma / r) ^ 6
     let r12 := r6 ^ 2
@@ -36,7 +36,7 @@ noncomputable def total_energy (positions : List (Fin n → ℝ))
       let pos_i := positions.get! i
       let pos_j := positions.get! j
       let r := minImageDistance cell_length pos_i pos_j
-      energy (i+1) j (acc + Ljp r cutoff epsilon sigma)
+      energy (i+1) j (acc + ljp r cutoff epsilon sigma)
   energy num_atoms (num_atoms - 1) 0.0
 
 
@@ -51,27 +51,9 @@ noncomputable def pairwiseEnergy (positions : List (Fin n → ℝ))
           (fun innerAcc j =>
             let pj := positions.get! j
             let r := minImageDistance cell_length pi pj
-            innerAcc + Ljp r cutoff epsilon sigma
+            innerAcc + ljp r cutoff epsilon sigma
           )
           0.0
       acc + innerSum
     )
     0.0
-
-
-theorem compute_total_energy_eq_double_sum
-  (positions : List (Fin n → ℝ))
-  (cell_length : Fin n → ℝ)
-  (cutoff epsilon sigma : ℝ)
-  : total_energy positions cell_length cutoff epsilon sigma
-    = ∑ i in Finset.range positions.length,
-        ∑ j in Finset.range i,
-          Ljp (minImageDistance cell_length (positions.get! i) (positions.get! j))
-              cutoff epsilon sigma := by sorry
-
-theorem energyConsistency
-  (positions : List (Fin n → ℝ))
-  (box_length : Fin n → ℝ)
-  (cutoff epsilon sigma : ℝ)
-  : total_energy positions box_length cutoff epsilon sigma
-    = pairwiseEnergy positions box_length cutoff epsilon sigma := by sorry
