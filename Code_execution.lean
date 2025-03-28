@@ -1,6 +1,7 @@
 import Mathlib
 import Research.CSVParser
 import Research.Functions
+import Research.Definitions
 open Research
 
 
