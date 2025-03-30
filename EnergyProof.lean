@@ -33,9 +33,9 @@ noncomputable def total_energy (positions : List (Fin n → ℝ))
       energy i i acc
     | i+1, j+1, acc =>
       -- sum over pair (i, j) then decrease j
-      let pos_i := positions.get! i
-      let pos_j := positions.get! j
-      let r := minImageDistance cell_length pos_i pos_j
+      let pos_i := positions[i]!
+      let pos_j := positions[j]!
+      let r := minImageDistance box_length pos_i pos_j
       energy (i+1) j (acc + Ljp r cutoff epsilon sigma)
   energy num_atoms (num_atoms - 1) 0.0
 
@@ -45,11 +45,11 @@ noncomputable def pairwiseEnergy (positions : List (Fin n → ℝ))
   (cutoff epsilon sigma : ℝ) : ℝ :=
   (List.range positions.length).foldl
     (fun acc i =>
-      let pi := positions.get! i
+      let pi := positions[i]!
       let innerSum :=
         (List.range i).foldl
           (fun innerAcc j =>
-            let pj := positions.get! j
+            let pj := positions[j]!
             let r := minImageDistance cell_length pi pj
             innerAcc + Ljp r cutoff epsilon sigma
           )
