@@ -9,7 +9,7 @@ def minImageDistance (posA posB : Fin 3 → Float) (box_length : Fin 3 → Float
   let dz := pbc (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (box_length ⟨2, by decide⟩)
   (dx^2 + dy^2 + dz^2).sqrt
 
-def ljfloat (r cutoff ε σ : Float) : Float :=
+def lj_float (r cutoff ε σ : Float) : Float :=
   if r ≤ cutoff then
     let r6 := (σ / r) ^ 6
     let r12 := r6 * r6
