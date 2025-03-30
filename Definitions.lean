@@ -25,7 +25,7 @@ noncomputable def pbc_real (position boxLength : ℝ) : ℝ :=
 
 
 -- Polymorphic definition of Lennard-Jones potential
-def ljp {α β : Type} [LE α] [DecidableLE α] [HDiv α α α] [HPow α β α] [HSub α α α]
+def lj_p {α β : Type} [LE α] [DecidableLE α] [HDiv α α α] [HPow α β α] [HSub α α α]
   [HMul α α α] [OfNat β 2] [OfNat α 4] [OfNat β 6] [Zero α] (r r_c ε σ : α) : α :=
   if r ≤ r_c then
     let r6 := (σ / r) ^ (6 : β)
@@ -35,7 +35,7 @@ def ljp {α β : Type} [LE α] [DecidableLE α] [HDiv α α α] [HPow α β α] 
     0
 
 -- Float type definition of Lennard-Jones potential
-def ljfloat (r r_c ε σ : Float) : Float :=
+def lj_float (r r_c ε σ : Float) : Float :=
   if r ≤ r_c then
     let r6 := (σ / r) ^ 6
     let r12 := r6 ^ 2
@@ -44,7 +44,7 @@ def ljfloat (r r_c ε σ : Float) : Float :=
     0
 
 -- Real type definition of Lennard-Jones potential
-noncomputable def ljreal (r r_c ε σ : ℝ) : ℝ :=
+noncomputable def lj_real (r r_c ε σ : ℝ) : ℝ :=
   if r ≤ r_c then
     let r6 := (σ / r) ^ 6
     let r12 := r6 ^ 2
@@ -53,19 +53,19 @@ noncomputable def ljreal (r r_c ε σ : ℝ) : ℝ :=
     0
 
 
+-- Polymorphic definition of Minimum image distance in 3 dimensions, simplified
 def MinImageDistance (boxLength posA posB : Fin 3 → α) : α :=
   let dist := fun i => pbc (posB i - posA i) (boxLength i)
   HasSqrt.sqrt (Finset.univ.sum (fun i => (dist i) ^ 2))
 
-
--- Polymorphic definition of Minimum image distance
+-- Polymorphic definition of Minimum image distance in 3 dimensions
 def minImageDistance (posA posB : Fin 3 → α) (boxLength : Fin 3 → α) : α :=
   let dx := pbc (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (boxLength ⟨0, by decide⟩)
   let dy := pbc (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (boxLength ⟨1, by decide⟩)
   let dz := pbc (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (boxLength ⟨2, by decide⟩)
   HasSqrt.sqrt (dx ^ 2 + dy ^ 2 + dz ^ 2)
 
-
+-- Real type definition of Minimum image distance
 noncomputable def minImageDistance_real (posA posB : Fin 3 → α) (boxLength : Fin 3 → α) : α :=
   let dx := pbc (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (boxLength ⟨0, by decide⟩)
   let dy := pbc (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (boxLength ⟨1, by decide⟩)
