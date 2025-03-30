@@ -77,7 +77,7 @@ lemma scale_continuous (ε σ : ℝ) :
 
 
 lemma differentiable_on_const (σ : ℝ) :
-  DifferentiableOn ℝ (fun r : ℝ => σ) {r | r > 0} := by
+  DifferentiableOn ℝ (fun _ : ℝ => σ) {r | r > 0} := by
   exact (differentiable_const σ).differentiableOn
 
 lemma differentiable_on_square_pow (σ : ℝ) :
