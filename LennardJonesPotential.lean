@@ -1,4 +1,3 @@
-
 import Mathlib
 
 lemma differentiable_at_zpow_neg12 (r : ℝ) (h : r ≠ 0) : DifferentiableAt ℝ (fun r ↦ r ^ (-12:ℤ )) r := by
@@ -13,11 +12,11 @@ lemma differentiable_at_zpow_neg6 (r : ℝ) (h : r ≠ 0) : DifferentiableAt ℝ
   · apply Or.inl
     exact h
 
-lemma pow_12: deriv (fun r => r ^ (- 12:ℤ) ) r = (-12:ℤ)  *  r ^ (-13 : ℤ) := by
+lemma pow_12: deriv (fun (r:ℝ) => r ^ (- 12:ℤ) ) r = (-12:ℤ)  *  r ^ (-13 : ℤ) := by
  rw [show (-13 : ℤ ) = -12 - 1 by ring]
  apply deriv_zpow
 
-lemma pow_6: deriv (fun r => r ^ (- 6:ℤ) ) r = (-6:ℤ)  *  r ^ (-7 : ℤ) := by
+lemma pow_6: deriv (fun (r:ℝ) => r ^ (- 6:ℤ) ) r = (-6:ℤ)  *  r ^ (-7 : ℤ) := by
  rw [show (-7 : ℤ ) = - 6 - 1 by ring]
  apply deriv_zpow
 
@@ -260,5 +259,3 @@ theorem ljp_second_derivative (r_c ε σ : ℝ) :
       apply differentiable_on_zpow_neg14
     · apply DifferentiableOn.const_mul
       apply differentiable_on_zpow_neg8
-
-
