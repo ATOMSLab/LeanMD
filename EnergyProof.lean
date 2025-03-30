@@ -4,18 +4,18 @@ Authors: Ejike Ugwuanyi
 
 import Mathlib
 
-noncomputable def pbc (position box_length : ℝ) : ℝ :=
+noncomputable def pbc_real (position box_length : ℝ) : ℝ :=
   position - box_length * round (position / box_length)
 
 /-- Compute the “minimum-image” distance (in all dimensions) between two positions under periodic boundary conditions. -/
 
-noncomputable def minImageDistance (box_length posA posB : Fin n → ℝ) : ℝ :=
-  let dist := fun i => pbc (posB i - posA i) (box_length i)
+noncomputable def minImageDistance_real (box_length posA posB : Fin n → ℝ) : ℝ :=
+  let dist := fun i => pbc_real (posB i - posA i) (box_length i)
   (Finset.univ.sum fun i => (dist i) ^ 2).sqrt
 
 /-- Lennard-Jones potential function. Returns 0 if r > cutoff. -/
 
-noncomputable def Ljp (r cutoff epsilon sigma : ℝ) : ℝ :=
+noncomputable def lj_real (r cutoff epsilon sigma : ℝ) : ℝ :=
   if r ≤ cutoff then
     let r6 := (sigma / r) ^ 6
     let r12 := r6 ^ 2
@@ -23,7 +23,7 @@ noncomputable def Ljp (r cutoff epsilon sigma : ℝ) : ℝ :=
   else
     0
 
-noncomputable def total_energy (positions : List (Fin n → ℝ))
+noncomputable def total_energy_real (positions : List (Fin n → ℝ))
   (box_length : Fin n → ℝ) (cutoff epsilon sigma : ℝ) : ℝ :=
   let num_atoms := positions.length
   let rec energy : Nat → Nat → ℝ → ℝ
@@ -35,13 +35,13 @@ noncomputable def total_energy (positions : List (Fin n → ℝ))
       -- sum over pair (i, j) then decrease j
       let pos_i := positions[i]!
       let pos_j := positions[j]!
-      let r := minImageDistance box_length pos_i pos_j
-      energy (i+1) j (acc + Ljp r cutoff epsilon sigma)
+      let r := minImageDistance_real box_length pos_i pos_j
+      energy (i+1) j (acc + lj_real r cutoff epsilon sigma)
   energy num_atoms (num_atoms - 1) 0.0
 
 
 noncomputable def pairwiseEnergy (positions : List (Fin n → ℝ))
-  (cell_length : Fin n → ℝ)
+  (box_length : Fin n → ℝ)
   (cutoff epsilon sigma : ℝ) : ℝ :=
   (List.range positions.length).foldl
     (fun acc i =>
@@ -50,8 +50,8 @@ noncomputable def pairwiseEnergy (positions : List (Fin n → ℝ))
         (List.range i).foldl
           (fun innerAcc j =>
             let pj := positions[j]!
-            let r := minImageDistance cell_length pi pj
-            innerAcc + Ljp r cutoff epsilon sigma
+            let r := minImageDistance_real box_length pi pj
+            innerAcc + lj_real r cutoff epsilon sigma
           )
           0.0
       acc + innerSum
