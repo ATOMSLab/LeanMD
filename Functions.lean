@@ -25,7 +25,7 @@ def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 
     else if j = 0 then energy (i - 1) (i - 2) acc
     else
       let r := minImageDistance (positions[i - 1]!) (positions[j - 1]!) box_length
-      let e := ljfloat r cutoff ε σ
+      let e := lj_float r cutoff ε σ
       energy i (j - 1) (acc + e)
   energy num_atoms (num_atoms - 1) 0.0
 
