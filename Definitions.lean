@@ -23,11 +23,13 @@ def pbc_float (position boxLength : Float) : Float :=
 noncomputable def pbc_real (position boxLength : ℝ) : ℝ :=
   position - boxLength * round (position / boxLength)
 
+
 -- Polymorphic definition of Lennard-Jones potential
-def ljp (r r_c ε σ : α) : α :=
+def ljp {α β : Type} [LE α] [DecidableLE α] [HDiv α α α] [HPow α β α] [HSub α α α]
+  [HMul α α α] [OfNat β 2] [OfNat α 4] [OfNat β 6] [Zero α] (r r_c ε σ : α) : α :=
   if r ≤ r_c then
-    let r6 := (σ / r) ^ 6
-    let r12 := r6 ^ 2
+    let r6 := (σ / r) ^ (6 : β)
+    let r12 := r6 ^ (2 : β)
     4 * ε * (r12 - r6)
   else
     0
