@@ -1,6 +1,3 @@
-/-
-Authors: Ejike Ugwuanyi
--/
 
 import Mathlib
 
