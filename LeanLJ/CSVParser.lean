@@ -1,5 +1,5 @@
 import Lean
-namespace Research
+namespace LeanLJ
 /-!
   ## CSV Parser for Atomic Positions and User Input
 -/
@@ -89,4 +89,4 @@ def readBoxLength (prompt : String) : IO (Fin 3 → Float) := do
       stdout.putStrLn "Invalid input. Please enter exactly three comma-separated positive float values."
   return boxLength
 
-end Research
+end LeanLJ
