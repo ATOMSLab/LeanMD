@@ -1,5 +1,5 @@
 import Mathlib
-namespace Research
+namespace LeanLJ
 
 class HasSqrt (α : Type) where
   sqrt : α → α
@@ -95,4 +95,4 @@ noncomputable def minImageDistance_real (posA posB : Fin 3 → ℝ) (boxLength :
 
 #eval HasSqrt.sqrt (5:Float)
 
-end Research
+end LeanLJ
