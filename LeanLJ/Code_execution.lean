@@ -1,8 +1,8 @@
 import Mathlib
-import Research.CSVParser
-import Research.Functions
-import Research.Definitions
-open Research
+import LeanLJ.CSVParser
+import LeanLJ.Functions
+import LeanLJ.Definitions
+open LeanLJ
 
 
 def main : IO Unit := do
@@ -22,7 +22,7 @@ def main : IO Unit := do
     let epsilon ← readSinglePositiveFloat "Enter epsilon value (e.g., 1.0):"
     let sigma ← readSinglePositiveFloat "Enter sigma value (e.g., 1.0):"
     let box_length ← readBoxLength "Enter box length (comma-separated, e.g., 8.0,8.0,8.0):"
-    let totalEnergy := Research.compute_total_energy positions box_length cutoff epsilon sigma
+    let totalEnergy := LeanLJ.compute_total_energy positions box_length cutoff epsilon sigma
     let numAtoms := positions.length
     stdout.putStrLn s!"The total internal energy is: {totalEnergy}"
     stdout.putStrLn s!"Number of atoms parsed: {numAtoms}"
