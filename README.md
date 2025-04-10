@@ -42,8 +42,11 @@ quality and reliability of scientific software, paving the way for discoveries g
   git clone https://github.com/ATOMSLab/LeanMD.git
   ```
 
+## License
 
+[![License](https://img.shields.io/badge/license-Apache%202.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
 
+This project is licensed under the [MIT License](LICENSE).
 
 
 
