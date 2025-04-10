@@ -25,8 +25,23 @@ LeanMD is setting a new standard in molecular dynamics simulations by ensuring t
 creating a trustworthy, verified approach to scientific computing, LeanMD is helping researchers run simulations confidently. LeanMD aims to improve the 
 quality and reliability of scientific software, paving the way for discoveries grounded in accurate, proven calculations.
 
-## Lean Installation
-### Refer to [Lean-Installation.md](Lean-Installation.md)
+## Project Installation
+  
+### Prerequisite
+  - Lean 4
+  
+  - Mathlib Library
+
+## Setup
+
+1 - Install Lean Dependencies and Mathlib
+ [HERE](https://lean-lang.org/lean4/doc/setup.html)
+
+2 - Clone the repository
+  ```bash
+  git clone https://github.com/ATOMSLab/LeanMD.git
+  ```
+
 
 
 
