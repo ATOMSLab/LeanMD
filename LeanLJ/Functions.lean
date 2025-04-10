@@ -1,4 +1,4 @@
-namespace Research
+namespace LeanLJ
 
 def pbc (position box_length : Float) : Float :=
   position - box_length * Float.round (position / box_length)
@@ -38,4 +38,4 @@ def getNISTEnergy (n : Nat) : Option Float :=
   | _ => none
 
 
-end Research
+end LeanLJ
