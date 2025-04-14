@@ -28,9 +28,9 @@ quality and reliability of scientific software, paving the way for discoveries g
 ## Project Installation
   
 ### Prerequisite
-  - Lean 4
+  - Lean 4 (Lean version 4.16.0-rc2)
   
-  - Mathlib Library
+  - Mathlib Library (at commit e1a3d4c)
 
 ## Setup
 
