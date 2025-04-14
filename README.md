@@ -26,6 +26,10 @@ creating a trustworthy, verified approach to scientific computing, LeanMD is hel
 quality and reliability of scientific software, paving the way for discoveries grounded in accurate, proven calculations.
 
 ## Project Installation
+
+## Background
+
+What is [Lean 4](https://docs.lean-lang.org/lean4/doc/whatIsLean.html)?
   
 ### Prerequisite
   - Lean 4 (Lean version 4.16.0-rc2)
@@ -35,7 +39,7 @@ quality and reliability of scientific software, paving the way for discoveries g
 ## Setup
 
 1 - Install Lean Dependencies and Mathlib
- [HERE](https://lean-lang.org/lean4/doc/setup.html)
+ [HERE]([https://lean-lang.org/lean4/doc/setup.html](https://docs.lean-lang.org/lean4/doc/quickstart.html))
 
 2 - Clone the repository
   ```bash
