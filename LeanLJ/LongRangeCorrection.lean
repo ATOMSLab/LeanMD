@@ -73,8 +73,9 @@ theorem long_range_correction_equality  (rc ρ ε σ : ℝ) (hr : 0 < rc) :
         _ = ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3)) := by
               congr <;> norm_cast
 
-theorem long_range_correction_equality' (hr : 0 < rc) (ρ ε σ : ℝ) :
+theorem long_range_correction_equality' (rc ρ ε σ : ℝ)  (hr : 0 < rc) :
     (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc, 4 * ε * (r ^ 2 * (((σ / r) ^ 12) -
     ((σ / r) ^ 6))) = U_LRC ρ ε σ rc π := by
   rw [U_LRC]
-  exact long_range_correction_equality hr ρ ε σ
+  exact long_range_correction_equality  rc ρ ε σ hr
+  
