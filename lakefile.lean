@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-package "LeanMD" where
+package "LeanLJ" where
   -- Settings applied to both builds and interactive editing
   leanOptions := #[
     ⟨`pp.unicode.fun, true⟩ -- pretty-prints `fun a ↦ b`
@@ -14,5 +14,5 @@ require "leanprover-community" / "mathlib"
 
 
 @[default_target]
-lean_lib «LeanMD» where
+lean_lib «LeanLJ» where
   -- add any library configuration options here
