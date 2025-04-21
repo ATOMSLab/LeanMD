@@ -3,7 +3,35 @@ import Mathlib
 
 noncomputable def pbc_real (position box_length : ℝ) : ℝ :=  position - box_length * round (position / box_length)
 
-noncomputable def minImageDistance_real (box_length posA posB : Fin n → ℝ) : ℝ :=
+noncomputable def squaredminImageDistance_real ( posA posB box_length : Fin 3 → ℝ) : ℝ :=
+  let dx := pbc_real (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (box_length ⟨0, by decide⟩)
+  let dy := pbc_real (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (box_length ⟨1, by decide⟩)
+  let dz := pbc_real (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (box_length ⟨2, by decide⟩)
+  dx^2 + dy^2 + dz^2 
+
+noncomputable def minImageDistance_real ( posA posB box_length : Fin 3 → ℝ) : ℝ :=
+  (squaredminImageDistance_real  posA posB box_length).sqrt
+
+
+theorem minImageDistance_real_self (pos box_length : Fin 3 → ℝ) : 
+  minImageDistance_real pos pos box_length = 0 := by
+  unfold minImageDistance_real squaredminImageDistance_real
+  have h0 : pbc_real (pos ⟨0, by decide⟩ - pos ⟨0, by decide⟩) (box_length ⟨0, by decide⟩) = 0 := by
+    simp [pbc_real, sub_self, zero_div, round_zero, mul_zero, sub_zero]
+  have h1 : pbc_real (pos ⟨1, by decide⟩ - pos ⟨1, by decide⟩) (box_length ⟨1, by decide⟩) = 0 := by
+    simp [pbc_real, sub_self, zero_div, round_zero, mul_zero, sub_zero]
+  have h2 : pbc_real (pos ⟨2, by decide⟩ - pos ⟨2, by decide⟩) (box_length ⟨2, by decide⟩) = 0 := by
+    simp [pbc_real, sub_self, zero_div, round_zero, mul_zero, sub_zero]
+  rw [h0, h1, h2]
+  simp
+
+theorem minImageDistance_real_nonneg ( posA posB box_length : Fin 3 → ℝ) :
+  0 ≤ minImageDistance_real  posA posB box_length := by
+  unfold minImageDistance_real
+  apply Real.sqrt_nonneg
+
+
+noncomputable def minImageDist (box_length posA posB : Fin n → ℝ) : ℝ :=
   let dist := fun i => pbc_real (posB i - posA i) (box_length i)
   (Finset.univ.sum (fun i => (dist i) ^ 2)).sqrt
 
@@ -56,9 +84,9 @@ theorem pbc_periodic (x L : ℝ) (k : ℤ) (hL : L ≠ 0) : pbc_real (x - k * L)
 --# The minImageDistance is bounded above by the diagonal of the simulation cell.
 theorem minImageDistance_bounded
     (box_length posA posB : Fin n → ℝ) (hbox : ∀ i, 0 < box_length i) :
-    minImageDistance_real box_length posA posB
+    minImageDist box_length posA posB
     ≤ (Finset.univ.sum fun i => (box_length i / 2) ^ 2).sqrt := by
-  dsimp only [minImageDistance_real]
+  dsimp only [minImageDist]
   apply Real.sqrt_le_sqrt
   apply Finset.sum_le_sum
   intro i _
@@ -77,9 +105,9 @@ theorem minImageDistance_bounded
 theorem minImageDistance_real_periodic
     (box_length posA posB : Fin n → ℝ) (k : Fin n → ℤ)
     (hbox : ∀ i, box_length i ≠ 0) :
-    minImageDistance_real box_length posA posB =
-    minImageDistance_real box_length (fun i => posA i + (k i : ℝ) * box_length i) posB := by
-  dsimp [minImageDistance_real]
+    minImageDist box_length posA posB =
+    minImageDist box_length (fun i => posA i + (k i : ℝ) * box_length i) posB := by
+  dsimp [minImageDist]
   have h_dist : ∀ i,
       pbc_real (posB i - (posA i + (k i : ℝ) * box_length i)) (box_length i)
         = pbc_real (posB i - posA i) (box_length i) := by
@@ -90,16 +118,16 @@ theorem minImageDistance_real_periodic
 
 
 --# The minimum image distance between any two points is non-negative
-theorem minImageDistance_real_nonneg (box_length posA posB : Fin n → ℝ) :
-  0 ≤ minImageDistance_real box_length posA posB := by
-  unfold minImageDistance_real
+theorem minImageDist_nonneg (box_length posA posB : Fin n → ℝ) :
+  0 ≤ minImageDist box_length posA posB := by
+  unfold minImageDist
   apply Real.sqrt_nonneg
 
 
 --# The minimum image distance between two identical points is zero.
-theorem minImageDistance_real_self (box_length pos : Fin n → ℝ) :
-  minImageDistance_real box_length pos pos = 0 := by
-  unfold minImageDistance_real
+theorem minImageDist_self (box_length pos : Fin n → ℝ) :
+  minImageDist box_length pos pos = 0 := by
+  unfold minImageDist
   have h_dist : ∀ i, pbc_real (pos i - pos i) (box_length i) = 0 := by
     intro i
     simp [pbc_real]
@@ -126,13 +154,6 @@ lemma apply_pbc_nested (a b L : ℝ) (hL : L ≠ 0) :
     _ = (a - b) - L * round ((a - b) / L) := by
         rw [← Int.cast_sub, round_sub_intCast, sub_sub, ← mul_add, ← Int.cast_add, add_sub_cancel]
 
-
--- Define the squared minimum image distance using a 3D vector as `Fin 3 → α`
-noncomputable def squaredminImageDistance_real (box_length posA posB : Fin 3 → ℝ) : ℝ :=
-  let dx := pbc_real (posB ⟨0, by decide⟩  - posA ⟨0, by decide⟩) (box_length ⟨0, by decide⟩)
-  let dy := pbc_real (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (box_length ⟨1, by decide⟩)
-  let dz := pbc_real (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (box_length ⟨2, by decide⟩)
-  dx^2 + dy^2 + dz^2
 
 --# Theorem to show that applying PBC to each position individually gives the same squared distance
 /-
