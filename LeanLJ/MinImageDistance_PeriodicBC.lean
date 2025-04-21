@@ -30,7 +30,7 @@ theorem minImageDistance_real_nonneg ( posA posB box_length : Fin 3 → ℝ) :
   unfold minImageDistance_real
   apply Real.sqrt_nonneg
 
-
+/-- Alternate way of defining the minimum image distance function -/
 noncomputable def minImageDist (box_length posA posB : Fin n → ℝ) : ℝ :=
   let dist := fun i => pbc_real (posB i - posA i) (box_length i)
   (Finset.univ.sum (fun i => (dist i) ^ 2)).sqrt
