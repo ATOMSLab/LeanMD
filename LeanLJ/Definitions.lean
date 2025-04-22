@@ -95,4 +95,10 @@ noncomputable def minImageDistance_real (posA posB : Fin 3 → ℝ) (boxLength :
 
 #eval HasSqrt.sqrt (5:Float)
 
+def U_LRC {α : Type} [Field α] (ρ ε σ rc τ  : α) : α :=
+  (8 * τ  * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
+
+noncomputable def U_LRC_real (ρ ε σ rc  : ℝ) : ℝ :=
+  (8 * π  * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
+
 end LeanLJ
