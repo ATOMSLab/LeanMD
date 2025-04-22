@@ -29,6 +29,22 @@ def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 
       energy i (j - 1) (acc + e)
   energy num_atoms (num_atoms - 1) 0.0
 
+
+def pi : Float := 3.141592653589793
+
+def rho (N boxlength : Float) : Float := N / (boxlength)^3
+
+def U_LRC_float (rho pi ε σ rc  : Float) : Float :=
+  (8 * rho * pi * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
+
+def getNISTEnergy_LRC (n : Nat) : Option Float :=
+  match n with
+  | 30 => some (-0.54517)
+  | 200 => some (-24.230)
+  | 400 => some (-49.622)
+  | 800 => some (-198.49)
+  | _ => none
+
 def getNISTEnergy (n : Nat) : Option Float :=
   match n with
   | 30 => some (-16.790)
