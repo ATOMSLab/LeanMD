@@ -6,9 +6,8 @@ open Real MeasureTheory
 def U_LRC {α : Type} [Field α] (ρ ε σ rc τ : α) : α :=
   (8 * τ * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
 
-
-noncomputable def U_LRC_real (ρ ε σ rc τ : ℝ) : ℝ :=
-  (8 * τ * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
+noncomputable def U_LRC_real (ρ ε σ rc  : ℝ) : ℝ :=
+  (8 * π * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
 
 theorem long_range_correction_equality  (rc ρ ε σ : ℝ) (hr : 0 < rc) :
     (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc, 4 * ε * (r ^ 2 * (((σ / r) ^ 12) -
@@ -79,7 +78,7 @@ theorem long_range_correction_equality  (rc ρ ε σ : ℝ) (hr : 0 < rc) :
 
 theorem long_range_correction_equality' (rc ρ ε σ : ℝ)  (hr : 0 < rc) :
     (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc, 4 * ε * (r ^ 2 * (((σ / r) ^ 12) -
-    ((σ / r) ^ 6))) = U_LRC_real ρ ε σ rc π := by
+    ((σ / r) ^ 6))) = U_LRC_real ρ ε σ rc  := by
   rw [U_LRC_real]
   exact long_range_correction_equality  rc ρ ε σ hr
   
