@@ -54,4 +54,7 @@ def main : IO Unit := do
     stdout.putStrLn ""
 
     stdout.putStrLn s!"Number of atoms parsed: {numAtoms}"
+    
+    stdout.putStrLn s!"The total internal energy including long-range correction is: {totalEnergy + Ulrc}"
+
 
