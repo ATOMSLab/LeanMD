@@ -26,7 +26,7 @@ def main : IO Unit := do
 
     let boxSide := box_length ⟨0, by decide⟩
     let density := rho numAtoms.toFloat boxSide
-    let Ulrc := numAtoms.toFloat * U_LRC_float density pi epsilon sigma cutoff
+    let Ulrc := numAtoms.toFloat * U_LRC density pi epsilon sigma cutoff
 
     stdout.putStrLn s!"The internal energy is: {totalEnergy}"
 
