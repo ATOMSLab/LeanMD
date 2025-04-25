@@ -1,4 +1,14 @@
+import Mathlib.Algebra.Field.Basic
 namespace LeanLJ
+
+instance : Pow Float Nat where
+  pow := fun x n =>
+    let rec go (x : Float) (n : Nat) : Float :=
+      match n with
+      | 0 => 1.0
+      | k + 1 => x * go x k
+    go x n
+
 
 def pbc (position box_length : Float) : Float :=
   position - box_length * Float.round (position / box_length)
@@ -33,6 +43,14 @@ def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 
 def pi : Float := 3.141592653589793
 
 def rho (N boxlength : Float) : Float := N / (boxlength)^3
+
+def U_LRC
+  {α : Type}
+  [Mul α] [Add α] [Sub α] [Div α] [Neg α] [Pow α Nat]
+  [OfNat α 3] [OfNat α 8] [OfNat α 9] [OfNat α 1]
+  (ρ pi ε σ rc : α) : α :=
+  (8 * pi * ρ * ε) *
+    ((1 / 9) * (σ ^ (12 : Nat) / rc ^ (9 : Nat)) - (1 / 3) * (σ ^ (6 : Nat) / rc ^ (3 : Nat)))
 
 def U_LRC_float (rho pi ε σ rc  : Float) : Float :=
   (8 * rho * pi * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
