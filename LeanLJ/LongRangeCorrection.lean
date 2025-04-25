@@ -95,10 +95,7 @@ theorem long_range_correction_equality_polymorphic
     (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc,
       4 * ε * (r ^ 2 * (((σ / r) ^ 12) - ((σ / r) ^ 6))) =
     U_LRC ρ π ε σ rc := by
-  have : U_LRC ρ π ε σ rc = U_LRC_real ρ ε σ rc := by
-    unfold U_LRC U_LRC_real
-    ring
-  rw [this]
+  have : U_LRC ρ π ε σ rc = U_LRC_real ρ ε σ rc :=  by apply U_LRC_eq_U_LRC_real 
   exact long_range_correction_equality' rc ρ ε σ hr
 
   
