@@ -29,6 +29,13 @@ instance : HasRound Float where
 instance [LinearOrderedField α] [FloorRing α] : HasRound α where
   pround := (fun (x : α) => round x)
 
+instance : Pow Float Nat where
+  pow := fun x n =>
+    let rec go (x : Float) (n : Nat) : Float :=
+      match n with
+      | 0 => 1.0
+      | k + 1 => x * go x k
+    go x n
 
 -- Polymorphic definition of Periodic boundary condition
 def pbc (position boxLength : α) [HSub α α α] [HMul α α α] [HDiv α α α] [HasRound α] : α :=
@@ -71,7 +78,6 @@ noncomputable def lj_real (r r_c ε σ : ℝ) : ℝ :=
   else
     0
 
-
 -- Polymorphic definition of Minimum image distance in 3 dimensions, simplified
 def MinImageDistance (α β : Type) (boxLength posA posB : Fin 3 → α) 
     [HSub α α α] [HMul α α α] [HDiv α α α] [HPow α β α] [AddCommMonoid α] [HasSqrt α] [HasRound α] [OfNat β 2] : α :=
@@ -95,8 +101,13 @@ noncomputable def minImageDistance_real (posA posB : Fin 3 → ℝ) (boxLength :
 
 #eval HasSqrt.sqrt (5:Float)
 
-def U_LRC {α : Type} [Field α] (ρ ε σ rc τ  : α) : α :=
-  (8 * τ  * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
+def U_LRC
+  {α : Type}
+  [Mul α] [Add α] [Sub α] [Div α] [Neg α] [Pow α Nat]
+  [OfNat α 3] [OfNat α 8] [OfNat α 9] [OfNat α 1]
+  (ρ pi ε σ rc : α) : α :=
+  (8 * pi * ρ * ε) *
+    ((1 / 9) * (σ ^ (12 : Nat) / rc ^ (9 : Nat)) - (1 / 3) * (σ ^ (6 : Nat) / rc ^ (3 : Nat)))
 
 noncomputable def U_LRC_real (ρ ε σ rc  : ℝ) : ℝ :=
   (8 * π  * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
