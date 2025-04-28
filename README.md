@@ -42,9 +42,9 @@ quality and reliability of scientific software, paving the way for discoveries g
   ```
 
 ## License
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
 
 
 
