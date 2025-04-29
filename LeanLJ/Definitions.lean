@@ -37,8 +37,21 @@ instance : Pow Float Nat where
       | k + 1 => x * go x k
     go x n
 
+
+class LJCompatible (α : Type ) extends LinearOrderedField α, Div α, HPow α Nat α, HasSqrt α, HasRound α
+
+-- Polymorphic definition of Lennard-Jones potential
+def lj_p {α : Type} [LJCompatible α] (r r_c ε σ : α) : α :=
+  if r ≤ r_c then
+    let r3 := (σ / r) ^ (3 : Nat)
+    let r6 := r3 * r3
+    let r12 := r6 * r6
+    4 * ε * (r12 - r6)
+  else
+    0
+
 -- Polymorphic definition of Periodic boundary condition
-def pbc (position boxLength : α) [HSub α α α] [HMul α α α] [HDiv α α α] [HasRound α] : α :=
+def pbc (position boxLength : α) [LJCompatible α] : α :=
   position - boxLength * (HasRound.pround (position / boxLength) : α)
 
 -- Float type definition of periodic boundary conditions
@@ -50,61 +63,57 @@ noncomputable def pbc_real (position boxLength : ℝ) : ℝ :=
   position - boxLength * round (position / boxLength)
 
 
--- Polymorphic definition of Lennard-Jones potential
-def lj_p {α β : Type} [LE α] [DecidableLE α] [HDiv α α α] [HPow α β α] [HSub α α α]
-  [HMul α α α] [OfNat β 2] [OfNat α 4] [OfNat β 6] [Zero α] (r r_c ε σ : α) : α :=
-  if r ≤ r_c then
-    let r6 := (σ / r) ^ (6 : β)
-    let r12 := r6 ^ (2 : β)
-    4 * ε * (r12 - r6)
-  else
-    0
-
 -- Float type definition of Lennard-Jones potential
 def lj_float (r r_c ε σ : Float) : Float :=
-  if r ≤ r_c then
-    let r6 := (σ / r) ^ 6
-    let r12 := r6 ^ 2
-    4 * ε * (r12 - r6)
-  else
-    0
+    if r ≤ r_c then
+      let r3 := (σ / r) ^ (3 : Nat)
+      let r6 := r3 * r3
+      let r12 := r6 * r6
+      4 * ε * (r12 - r6)
+    else
+      0
 
 -- Real type definition of Lennard-Jones potential
-noncomputable def lj_real (r r_c ε σ : ℝ) : ℝ :=
+noncomputable def lj_real  (r r_c ε σ  : ℝ) : ℝ :=
   if r ≤ r_c then
-    let r6 := (σ / r) ^ 6
-    let r12 := r6 ^ 2
+    let r3 := (σ / r) ^ (3 : Nat)
+    let r6 := r3 * r3
+    let r12 := r6 * r6
     4 * ε * (r12 - r6)
   else
     0
 
 -- Polymorphic definition of Minimum image distance in 3 dimensions, simplified
-def MinImageDistance (α β : Type) (boxLength posA posB : Fin 3 → α) 
-    [HSub α α α] [HMul α α α] [HDiv α α α] [HPow α β α] [AddCommMonoid α] [HasSqrt α] [HasRound α] [OfNat β 2] : α :=
+def MinImageDistance {α : Type } [LJCompatible α] (boxLength posA posB : Fin 3 → α)  : α :=
   let dist := fun i => pbc (posB i - posA i) (boxLength i)
-  HasSqrt.sqrt (Finset.univ.sum (fun i => (dist i) ^ (2 : β)))
+  HasSqrt.sqrt (Finset.univ.sum (fun i => (dist i) ^ (2 : Nat)))
 
 -- Polymorphic definition of Minimum image distance in 3 dimensions
-def minImageDistance (posA posB : Fin 3 → α) (boxLength : Fin 3 → α) 
-    [HSub α α α] [HMul α α α] [HDiv α α α] [HPow α β α] [AddCommMonoid α] [HasSqrt α] [HasRound α] [OfNat β 2] : α :=
-  let dx := pbc (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (boxLength ⟨0, by decide⟩)
-  let dy := pbc (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (boxLength ⟨1, by decide⟩)
-  let dz := pbc (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (boxLength ⟨2, by decide⟩)
-  HasSqrt.sqrt (dx ^ (2 : β) + dy ^ (2 : β) + dz ^ (2 : β))
+def minImageDistance {α : Type } [LJCompatible α]
+    (posA posB : Fin 3 → α) (boxLength : Fin 3 → α) : α :=
+  let dx := pbc (posB (0:Fin 3) - posA (0: Fin 3)) (boxLength (0: Fin 3))
+  let dy := pbc (posB (1:Fin 3) - posA (1:Fin 3)) (boxLength (1:Fin 3))
+  let dz := pbc (posB (2:Fin 3) - posA (2:Fin 3)) (boxLength (2:Fin 3))
+  HasSqrt.sqrt (dx ^ (2 : Nat) + dy ^ (2 : Nat) + dz ^ (2 : Nat))
 
 -- Real type definition of Minimum image distance
 noncomputable def minImageDistance_real (posA posB : Fin 3 → ℝ) (boxLength : Fin 3 → ℝ) : ℝ :=
-  let dx := pbc_real (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (boxLength ⟨0, by decide⟩)
-  let dy := pbc_real (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (boxLength ⟨1, by decide⟩)
-  let dz := pbc_real (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (boxLength ⟨2, by decide⟩)
-  HasSqrt.sqrt (dx ^ 2 + dy ^ 2 + dz ^ 2)
+  let dx := pbc_real (posB (0:Fin 3) - posA (0: Fin 3)) (boxLength (0: Fin 3))
+  let dy := pbc_real (posB (1:Fin 3) - posA (1:Fin 3)) (boxLength (1:Fin 3))
+  let dz := pbc_real (posB (2:Fin 3) - posA (2:Fin 3)) (boxLength (2:Fin 3))
+  HasSqrt.sqrt (dx ^ (2 : Nat) + dy ^ (2 : Nat) + dz ^ (2 : Nat))
+
+-- Float type definition of Minimum image distance
+def minImageDistance_float (posA posB : Fin 3 → Float) (boxLength : Fin 3 → Float) : Float :=
+  let dx := pbc_float (posB (0:Fin 3) - posA (0: Fin 3)) (boxLength (0: Fin 3))
+  let dy := pbc_float (posB (1:Fin 3) - posA (1:Fin 3)) (boxLength (1:Fin 3))
+  let dz := pbc_float (posB (2:Fin 3) - posA (2:Fin 3)) (boxLength (2:Fin 3))
+  Float.sqrt (dx ^ (2 : Nat) + dy ^ (2 : Nat) + dz ^ (2 : Nat))
 
 #eval HasSqrt.sqrt (5:Float)
 
 def U_LRC
-  {α : Type}
-  [Mul α] [Add α] [Sub α] [Div α] [Neg α] [Pow α Nat]
-  [OfNat α 3] [OfNat α 8] [OfNat α 9] [OfNat α 1]
+  {α : Type} [LJCompatible α]
   (ρ pi ε σ rc : α) : α :=
   (8 * pi * ρ * ε) *
     ((1 / 9) * (σ ^ (12 : Nat) / rc ^ (9 : Nat)) - (1 / 3) * (σ ^ (6 : Nat) / rc ^ (3 : Nat)))
