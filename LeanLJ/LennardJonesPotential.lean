@@ -19,6 +19,24 @@ def lj_p {α : Type} [LJCompatible α] (r r_c ε σ : α) : α :=
   else
     0
 
+noncomputable def lj_real  (r r_c ε σ  : ℝ) : ℝ :=
+  if r ≤ r_c then
+    let r3 := (σ / r) ^ (3 : Nat)
+    let r6 := r3 * r3
+    let r12 := r6 * r6
+    4 * ε * (r12 - r6)
+  else
+    0
+
+def lj_float (r r_c ε σ : Float) : Float :=
+    if r ≤ r_c then
+      let r3 := (σ / r) ^ (3 : Nat)
+      let r6 := r3 * r3
+      let r12 := r6 * r6
+      4 * ε * (r12 - r6)
+    else
+      0
+
 lemma differentiable_at_zpow_neg12 (r : ℝ) (h : r ≠ 0) : DifferentiableAt ℝ (fun r ↦ r ^ (-12:ℤ )) r := by
   apply DifferentiableAt.zpow
   · apply differentiable_id
@@ -161,25 +179,6 @@ lemma differentiable_pow6_div (σ : ℝ) (hr : ∀ x : ℝ, x > 0) :
   · intro x hx
     have h_pos : x > 0 := hr x
     exact absurd hx (ne_of_gt h_pos)
-
-
-noncomputable def lj_real  (r r_c ε σ  : ℝ) : ℝ :=
-  if r ≤ r_c then
-    let r3 := (σ / r) ^ (3 : Nat)
-    let r6 := r3 * r3
-    let r12 := r6 * r6
-    4 * ε * (r12 - r6)
-  else
-    0
-
-def lj_float (r r_c ε σ : Float) : Float :=
-    if r ≤ r_c then
-      let r3 := (σ / r) ^ (3 : Nat)
-      let r6 := r3 * r3
-      let r12 := r6 * r6
-      4 * ε * (r12 - r6)
-    else
-      0
 
 theorem cutoff_behavior (r r_c ε σ : ℝ)
     (h : r > r_c) : lj_real r r_c ε σ = 0 := by
