@@ -1,5 +1,24 @@
 import Mathlib
 
+instance : Pow Float Nat where
+  pow := fun x n =>
+    let rec go (x : Float) (n : Nat) : Float :=
+      match n with
+      | 0 => 1.0
+      | k + 1 => x * go x k
+    go x n
+
+class LJCompatible (α : Type ) extends LinearOrderedField α, HPow α Nat α
+
+def lj_p {α : Type} [LJCompatible α] (r r_c ε σ : α) : α :=
+  if r ≤ r_c then
+    let r3 := (σ / r) ^ (3 : Nat)
+    let r6 := r3 * r3
+    let r12 := r6 * r6
+    4 * ε * (r12 - r6)
+  else
+    0
+
 lemma differentiable_at_zpow_neg12 (r : ℝ) (h : r ≠ 0) : DifferentiableAt ℝ (fun r ↦ r ^ (-12:ℤ )) r := by
   apply DifferentiableAt.zpow
   · apply differentiable_id
@@ -12,27 +31,6 @@ lemma differentiable_at_zpow_neg6 (r : ℝ) (h : r ≠ 0) : DifferentiableAt ℝ
   · apply Or.inl
     exact h
 
-lemma pow_12: deriv (fun (r:ℝ) => r ^ (- 12:ℤ) ) r = (-12:ℤ)  *  r ^ (-13 : ℤ) := by
- rw [show (-13 : ℤ ) = -12 - 1 by ring]
- apply deriv_zpow
-
-lemma pow_6: deriv (fun (r:ℝ) => r ^ (- 6:ℤ) ) r = (-6:ℤ)  *  r ^ (-7 : ℤ) := by
- rw [show (-7 : ℤ ) = - 6 - 1 by ring]
- apply deriv_zpow
-
-lemma lj_pow_12 (σ r : ℝ) (h : r ≠ 0): deriv (fun r => σ^12 * r ^ (- 12:ℤ) ) r = σ^12 * (-12:ℤ) * r ^ (-13 : ℤ) := by
-  rw [deriv_const_mul]
-  rw [pow_12]
-  ring
-  apply differentiable_at_zpow_neg12
-  exact h
-
-lemma lj_pow_6 (σ r : ℝ) (h : r ≠ 0): deriv (fun r => σ^6 * r ^ (- 6:ℤ) ) r = σ^6 * (-6:ℤ) * r ^ (-7 : ℤ) := by
-  rw [deriv_const_mul]
-  rw [pow_6]
-  ring
-  apply differentiable_at_zpow_neg6
-  exact h
 
 lemma lj_pow_12' (σ r : ℝ) (h : r ≠ 0): deriv (fun r => σ^12 * r ^ (- 12:ℤ) ) r =  σ^12 * (-12:ℤ)  *  r ^ (-13 : ℤ) := by
    rw [deriv_const_mul]
@@ -167,11 +165,21 @@ lemma differentiable_pow6_div (σ : ℝ) (hr : ∀ x : ℝ, x > 0) :
 
 noncomputable def lj_real  (r r_c ε σ  : ℝ) : ℝ :=
   if r ≤ r_c then
-    let r6 := (σ / r) ^ 6
-    let r12 := r6 ^ 2
+    let r3 := (σ / r) ^ (3 : Nat)
+    let r6 := r3 * r3
+    let r12 := r6 * r6
     4 * ε * (r12 - r6)
   else
     0
+
+def lj_float (r r_c ε σ : Float) : Float :=
+    if r ≤ r_c then
+      let r3 := (σ / r) ^ (3 : Nat)
+      let r6 := r3 * r3
+      let r12 := r6 * r6
+      4 * ε * (r12 - r6)
+    else
+      0
 
 theorem cutoff_behavior (r r_c ε σ : ℝ)
     (h : r > r_c) : lj_real r r_c ε σ = 0 := by
@@ -194,7 +202,7 @@ theorem ljp_eq_le {r_c ε σ : ℝ} :
   rw [if_pos h_r_le_rc]
   ring
 
-theorem ljp_eq_gt : ∀ r ∈ {r | r > r_c ∧ r > 0}, lj_real r r_c ε σ = 0 := by
+theorem ljp_eq_gt (r_c ε σ  : ℝ) : ∀ r ∈ {r | r > r_c ∧ r > 0}, lj_real r r_c ε σ = 0 := by
   intro r hr
   have h_r_gt_rc : r > r_c := hr.1
   have h_r_pos : r > 0 := hr.2
@@ -259,3 +267,5 @@ theorem ljp_second_derivative (r_c ε σ : ℝ) :
       apply differentiable_on_zpow_neg14
     · apply DifferentiableOn.const_mul
       apply differentiable_on_zpow_neg8
+
+
