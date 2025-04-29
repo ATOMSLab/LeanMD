@@ -4,10 +4,11 @@ import Mathlib
 noncomputable def pbc_real (position box_length : ℝ) : ℝ :=  position - box_length * round (position / box_length)
 
 noncomputable def squaredminImageDistance_real ( posA posB box_length : Fin 3 → ℝ) : ℝ :=
-  let dx := pbc_real (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (box_length ⟨0, by decide⟩)
-  let dy := pbc_real (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (box_length ⟨1, by decide⟩)
-  let dz := pbc_real (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (box_length ⟨2, by decide⟩)
+  let dx := pbc_real (posB (0:Fin 3) - posA (0: Fin 3)) (box_length (0: Fin 3))
+  let dy := pbc_real (posB (1:Fin 3) - posA (1: Fin 3)) (box_length (1: Fin 3))
+  let dz := pbc_real (posB (2:Fin 3) - posA (2: Fin 3)) (box_length (2: Fin 3))
   dx^2 + dy^2 + dz^2 
+
 
 noncomputable def minImageDistance_real ( posA posB box_length : Fin 3 → ℝ) : ℝ :=
   (squaredminImageDistance_real  posA posB box_length).sqrt
@@ -16,11 +17,11 @@ noncomputable def minImageDistance_real ( posA posB box_length : Fin 3 → ℝ) 
 theorem minImageDistance_real_self (pos box_length : Fin 3 → ℝ) : 
   minImageDistance_real pos pos box_length = 0 := by
   unfold minImageDistance_real squaredminImageDistance_real
-  have h0 : pbc_real (pos ⟨0, by decide⟩ - pos ⟨0, by decide⟩) (box_length ⟨0, by decide⟩) = 0 := by
+  have h0 : pbc_real (pos (0:Fin 3) - pos (0: Fin 3)) (box_length (0: Fin 3)) = 0 := by
     simp [pbc_real, sub_self, zero_div, round_zero, mul_zero, sub_zero]
-  have h1 : pbc_real (pos ⟨1, by decide⟩ - pos ⟨1, by decide⟩) (box_length ⟨1, by decide⟩) = 0 := by
+  have h1 : pbc_real (pos (1:Fin 3) - pos (1:Fin 3)) (box_length (1:Fin 3)) = 0 := by
     simp [pbc_real, sub_self, zero_div, round_zero, mul_zero, sub_zero]
-  have h2 : pbc_real (pos ⟨2, by decide⟩ - pos ⟨2, by decide⟩) (box_length ⟨2, by decide⟩) = 0 := by
+  have h2 : pbc_real (pos (2:Fin 3) - pos (2:Fin 3)) (box_length (2:Fin 3)) = 0 := by
     simp [pbc_real, sub_self, zero_div, round_zero, mul_zero, sub_zero]
   rw [h0, h1, h2]
   simp
