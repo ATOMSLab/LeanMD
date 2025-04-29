@@ -19,13 +19,16 @@ def minImageDistance (posA posB : Fin 3 → Float) (box_length : Fin 3 → Float
   let dz := pbc (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (box_length ⟨2, by decide⟩)
   (dx^2 + dy^2 + dz^2).sqrt
 
-def lj_float (r cutoff ε σ : Float) : Float :=
-  if r ≤ cutoff then
-    let r6 := (σ / r) ^ 6
-    let r12 := r6 * r6
-    4 * ε * (r12 - r6)
-  else
-    0.0
+
+def lj_float (r r_c ε σ : Float) : Float :=
+    if r ≤ r_c then
+      let r3 := (σ / r) ^ (3 : Nat)
+      let r6 := r3 * r3
+      let r12 := r6 * r6
+      4 * ε * (r12 - r6)
+    else
+      0
+
 
 def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 3 → Float)
     (cutoff ε σ : Float) : Float :=
