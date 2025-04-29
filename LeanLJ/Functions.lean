@@ -9,6 +9,7 @@ instance : Pow Float Nat where
       | k + 1 => x * go x k
     go x n
 
+class LJCompatible (α : Type) extends LinearOrderedField α, Div α, HPow α Nat α
 
 def pbc (position box_length : Float) : Float :=
   position - box_length * Float.round (position / box_length)
@@ -29,7 +30,6 @@ def lj_float (r r_c ε σ : Float) : Float :=
     else
       0
 
-
 def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 3 → Float)
     (cutoff ε σ : Float) : Float :=
   let num_atoms := positions.length
@@ -48,13 +48,12 @@ def pi : Float := 3.141592653589793
 def rho (N boxlength : Float) : Float := N / (boxlength)^3
 
 def U_LRC
-  {α : Type}
-  [Mul α] [Add α] [Sub α] [Div α] [Neg α] [Pow α Nat]
-  [OfNat α 3] [OfNat α 8] [OfNat α 9] [OfNat α 1]
-  (ρ pi ε σ rc : α) : α :=
-  (8 * pi * ρ * ε) *
-    ((1 / 9) * (σ ^ (12 : Nat) / rc ^ (9 : Nat)) - (1 / 3) * (σ ^ (6 : Nat) / rc ^ (3 : Nat)))
-
+  {α : Type} [LJCompatible α]
+    (ρ pi ε σ rc : α) : α :=
+  (8 * π * ρ * ε) *
+    ((1 / (9 : α)) * (σ ^ (12 : Nat) / rc ^ (9 : Nat))
+       - (1 / (3 : α)) * (σ ^ (6 : Nat)  / rc ^ (3 : Nat)))
+  
 def U_LRC_float (rho pi ε σ rc  : Float) : Float :=
   (8 * rho * pi * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
 
