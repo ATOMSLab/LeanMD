@@ -9,19 +9,19 @@ instance : Pow Float Nat where
       | k + 1 => x * go x k
     go x n
 
-class LJCompatible (α : Type) extends LinearOrderedField α, Div α, HPow α Nat α
+class RealLike (α : Type ) extends LinearOrderedField α, Div α, HPow α Nat α, HasSqrt α, HasRound α
 
 def pbc (position box_length : Float) : Float :=
   position - box_length * Float.round (position / box_length)
 
 def minImageDistance (posA posB : Fin 3 → Float) (box_length : Fin 3 → Float) : Float :=
-  let dx := pbc (posB ⟨0, by decide⟩ - posA ⟨0, by decide⟩) (box_length ⟨0, by decide⟩)
-  let dy := pbc (posB ⟨1, by decide⟩ - posA ⟨1, by decide⟩) (box_length ⟨1, by decide⟩)
-  let dz := pbc (posB ⟨2, by decide⟩ - posA ⟨2, by decide⟩) (box_length ⟨2, by decide⟩)
+  let dx := pbc (posB (0:Fin 3) - posA (0: Fin 3)) (box_length (0: Fin 3))
+  let dy := pbc (posB (1: Fin 3) - posA (1: Fin 3)) (box_length (1: Fin 3))
+  let dz := pbc (posB (2: Fin 3) - posA (2: Fin 3)) (box_length (2 : Fin 3))
   (dx^2 + dy^2 + dz^2).sqrt
 
 
-def lj_float (r r_c ε σ : Float) : Float :=
+def lj_Float (r r_c ε σ : Float) : Float :=
     if r ≤ r_c then
       let r3 := (σ / r) ^ (3 : Nat)
       let r6 := r3 * r3
@@ -48,7 +48,7 @@ def pi : Float := 3.141592653589793
 def rho (N boxlength : Float) : Float := N / (boxlength)^3
 
 def U_LRC
-  {α : Type} [LJCompatible α]
+  {α : Type} [RealLike α]
     (ρ pi ε σ rc : α) : α :=
   (8 * π * ρ * ε) *
     ((1 / (9 : α)) * (σ ^ (12 : Nat) / rc ^ (9 : Nat))
