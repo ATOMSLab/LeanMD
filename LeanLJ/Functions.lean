@@ -49,7 +49,7 @@ def computeTotalEnergy (positions : List (Fin 3 → Float))
 
 def pi : Float := 3.141592653589793
 
-def rho (N box_length : Float) : Float := N / (box_length)^3
+def rho (N box_length : Float) : Float := N / (boxLength)^3
 
 def U_LRC
   {α : Type} [RealLike α]
