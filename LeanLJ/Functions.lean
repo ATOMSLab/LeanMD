@@ -32,8 +32,8 @@ def lj_Float (r r_c ε σ : Float) : Float :=
 
 def Indices (n : Nat) : List (Nat × Nat) :=
   List.flatten ((List.range n).map fun i =>
-    (List.range (n - i - 1)).map fun j =>
-      (i, i + j + 1))
+    (List.range (n - i - 1)).map fun k =>
+      (i, i + k + 1))
 
 def computeTotalEnergy (positions : List (Fin 3 → Float))
     (boxLength : Fin 3 → Float)
