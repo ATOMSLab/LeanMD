@@ -44,7 +44,7 @@ def computeTotalEnergy (positions : List (Fin 3 → Float))
     let posI := List.get! positions i
     let posJ := List.get! positions j
     let r := minImageDistance posI posJ box_length
-    acc + lj_float r cutoff ε σ
+    acc + lj_Float r cutoff ε σ
   ) 0.0
 
 def pi : Float := 3.141592653589793
