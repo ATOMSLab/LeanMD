@@ -30,22 +30,26 @@ def lj_Float (r r_c ε σ : Float) : Float :=
     else
       0
 
-def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 3 → Float)
-    (cutoff ε σ : Float) : Float :=
-  let num_atoms := positions.length
-  let rec energy (i j : Nat) (acc : Float) : Float :=
-    if i = 0 then acc
-    else if j = 0 then energy (i - 1) (i - 2) acc
-    else
-      let r := minImageDistance (positions[i - 1]!) (positions[j - 1]!) box_length
-      let e := lj_float r cutoff ε σ
-      energy i (j - 1) (acc + e)
-  energy num_atoms (num_atoms - 1) 0.0
+def Indices (n : Nat) : List (Nat × Nat) :=
+  List.flatten ((List.range n).map fun i =>
+    (List.range (n - i - 1)).map fun k =>
+      (i, i + k + 1))
 
+def computeTotalEnergy (positions : List (Fin 3 → Float))
+    (box_length : Fin 3 → Float)
+    (cutoff ε σ : Float) : Float :=
+  let n := positions.length
+  let indexPairs := Indices n
+  indexPairs.foldl (fun acc (i, j) =>
+    let posI := List.get! positions i
+    let posJ := List.get! positions j
+    let r := minImageDistance posI posJ box_length
+    acc + lj_float r cutoff ε σ
+  ) 0.0
 
 def pi : Float := 3.141592653589793
 
-def rho (N boxlength : Float) : Float := N / (boxlength)^3
+def rho (N box_length : Float) : Float := N / (box_length)^3
 
 def U_LRC
   {α : Type} [RealLike α]
@@ -54,7 +58,7 @@ def U_LRC
     ((1 / (9 : α)) * (σ ^ (12 : Nat) / rc ^ (9 : Nat))
        - (1 / (3 : α)) * (σ ^ (6 : Nat)  / rc ^ (3 : Nat)))
   
-def U_LRC_float (rho pi ε σ rc  : Float) : Float :=
+def U_LRC_Float (rho pi ε σ rc  : Float) : Float :=
   (8 * rho * pi * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
 
 def getNISTEnergy_LRC (n : Nat) : Option Float :=
