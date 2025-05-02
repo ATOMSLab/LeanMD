@@ -30,7 +30,7 @@ def lj_Float (r r_c ε σ : Float) : Float :=
     else
       0
 
-def Indices (n : Nat) : List (Nat × Nat) :=
+def pairs (n : Nat) : List (Nat × Nat) :=
   List.flatten ((List.range n).map fun i =>
     (List.range (n - i - 1)).map fun k =>
       (i, i + k + 1))
@@ -39,7 +39,7 @@ def computeTotalEnergy (positions : List (Fin 3 → Float))
     (boxLength : Fin 3 → Float)
     (cutoff ε σ : Float) : Float :=
   let n := positions.length
-  let indexPairs := Indices n
+  let indexPairs := pairs n
   indexPairs.foldl (fun acc (i, j) =>
     let posI := List.get! positions i
     let posJ := List.get! positions j
