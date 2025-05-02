@@ -11,13 +11,13 @@ instance : Pow Float Nat where
 
 class RealLike (α : Type ) extends LinearOrderedField α, Div α, HPow α Nat α, HasSqrt α, HasRound α
 
-def pbc (position box_length : Float) : Float :=
-  position - box_length * Float.round (position / box_length)
+def pbc (position boxLength : Float) : Float :=
+  position - boxLength * Float.round (position / boxLength)
 
-def minImageDistance (posA posB : Fin 3 → Float) (box_length : Fin 3 → Float) : Float :=
-  let dx := pbc (posB (0:Fin 3) - posA (0: Fin 3)) (box_length (0: Fin 3))
-  let dy := pbc (posB (1: Fin 3) - posA (1: Fin 3)) (box_length (1: Fin 3))
-  let dz := pbc (posB (2: Fin 3) - posA (2: Fin 3)) (box_length (2 : Fin 3))
+def minImageDistance (posA posB : Fin 3 → Float) (boxLength : Fin 3 → Float) : Float :=
+  let dx := pbc (posB (0:Fin 3) - posA (0: Fin 3)) (boxLength (0: Fin 3))
+  let dy := pbc (posB (1: Fin 3) - posA (1: Fin 3)) (boxLength (1: Fin 3))
+  let dz := pbc (posB (2: Fin 3) - posA (2: Fin 3)) (boxLength (2 : Fin 3))
   (dx^2 + dy^2 + dz^2).sqrt
 
 
@@ -32,18 +32,18 @@ def lj_Float (r r_c ε σ : Float) : Float :=
 
 def Indices (n : Nat) : List (Nat × Nat) :=
   List.flatten ((List.range n).map fun i =>
-    (List.range (n - i - 1)).map fun k =>
-      (i, i + k + 1))
+    (List.range (n - i - 1)).map fun j =>
+      (i, i + j + 1))
 
 def computeTotalEnergy (positions : List (Fin 3 → Float))
-    (box_length : Fin 3 → Float)
+    (boxLength : Fin 3 → Float)
     (cutoff ε σ : Float) : Float :=
   let n := positions.length
   let indexPairs := Indices n
   indexPairs.foldl (fun acc (i, j) =>
     let posI := List.get! positions i
     let posJ := List.get! positions j
-    let r := minImageDistance posI posJ box_length
+    let r := minImageDistance posI posJ boxLength
     acc + lj_Float r cutoff ε σ
   ) 0.0
 
