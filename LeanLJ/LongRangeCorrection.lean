@@ -1,16 +1,12 @@
 import Mathlib
+import LeanLJ
+import LeanLJ.Instance
+import LeanLJ.Function
+open LeanLJ
+
 open Real MeasureTheory
+namespace LeanLJ
 
-def U_LRC
-  {α : Type}
-  [Mul α] [Add α] [Sub α] [Div α] [Neg α] [Pow α Nat]
-  [OfNat α 3] [OfNat α 8] [OfNat α 9] [OfNat α 1]
-  (ρ pi ε σ rc : α) : α :=
-  (8 * pi * ρ * ε) *
-    ((1 / 9) * (σ ^ (12 : Nat) / rc ^ (9 : Nat)) - (1 / 3) * (σ ^ (6 : Nat) / rc ^ (3 : Nat)))
-
-noncomputable def U_LRC_real (ρ ε σ rc  : ℝ) : ℝ :=
-  (8 * π * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
 
 theorem long_range_correction_equality  (rc ρ ε σ : ℝ) (hr : 0 < rc) :
     (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc, 4 * ε * (r ^ 2 * (((σ / r) ^ 12) -
@@ -81,21 +77,6 @@ theorem long_range_correction_equality  (rc ρ ε σ : ℝ) (hr : 0 < rc) :
 
 theorem long_range_correction_equality' (rc ρ ε σ : ℝ)  (hr : 0 < rc) :
     (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc, 4 * ε * (r ^ 2 * (((σ / r) ^ 12) -
-    ((σ / r) ^ 6))) = U_LRC_real ρ ε σ rc  := by
-  rw [U_LRC_real]
+    ((σ / r) ^ 6))) = U_LRC_Real ρ ε σ rc  := by
+  rw [U_LRC_Real]
   exact long_range_correction_equality  rc ρ ε σ hr
-
-theorem U_LRC_eq_U_LRC_real (ρ ε σ rc : ℝ) :
-  U_LRC ρ Real.pi ε σ rc = U_LRC_real ρ ε σ rc := by
-  unfold U_LRC U_LRC_real
-  ring
-
-theorem long_range_correction_equality_polymorphic
-    (rc ρ ε σ : ℝ) (hr : 0 < rc) :
-    (2 * π * ρ) * ∫ (r : ℝ) in Set.Ioi rc,
-      4 * ε * (r ^ 2 * (((σ / r) ^ 12) - ((σ / r) ^ 6))) =
-    U_LRC ρ π ε σ rc := by
-  have : U_LRC ρ π ε σ rc = U_LRC_real ρ ε σ rc :=  by apply U_LRC_eq_U_LRC_real 
-  exact long_range_correction_equality' rc ρ ε σ hr
-
-  
