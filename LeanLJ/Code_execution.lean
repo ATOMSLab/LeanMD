@@ -1,7 +1,9 @@
 import Mathlib
+import LeanLJ
 import LeanLJ.CSVParser
-import LeanLJ.Functions
-import LeanLJ.Definitions
+import LeanLJ.Function
+import LeanLJ.Instance
+
 open LeanLJ
 
 def main : IO Unit := do
@@ -20,13 +22,13 @@ def main : IO Unit := do
     let cutoff ← readSinglePositiveFloat "Enter the cutoff distance (e.g., 3.0):"
     let epsilon ← readSinglePositiveFloat "Enter epsilon value (e.g., 1.0):"
     let sigma ← readSinglePositiveFloat "Enter sigma value (e.g., 1.0):"
-    let boxLength ← readBoxLength "Enter box length (comma-separated, e.g., 8.0,8.0,8.0):"
+    let box_length ← readBoxLength "Enter box length (comma-separated, e.g., 8.0,8.0,8.0):"
     let totalEnergy := computeTotalEnergy positions box_length cutoff epsilon sigma
     let numAtoms := positions.length
 
-    let boxSide := boxLength ⟨0, by decide⟩
+    let boxSide := box_length ⟨0, by decide⟩
     let density := rho numAtoms.toFloat boxSide
-    let Ulrc := numAtoms.toFloat * U_LRC density pi epsilon sigma cutoff
+    let Ulrc := numAtoms.toFloat * U_LRC_Float density pi epsilon sigma cutoff
 
     stdout.putStrLn s!"The internal energy is: {totalEnergy}"
 
@@ -54,7 +56,9 @@ def main : IO Unit := do
     stdout.putStrLn ""
 
     stdout.putStrLn s!"Number of atoms parsed: {numAtoms}"
-    
     stdout.putStrLn s!"The total internal energy including long-range correction is: {totalEnergy + Ulrc}"
 
 
+
+-- lake env lean Research/Code_execution.lean --run
+--lake env lean --run LeanLJ/Execution.lean
