@@ -90,6 +90,10 @@ def U_LRC_Float (rho pi ε σ rc  : Float) : Float :=
   (8 * rho * pi * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
 
 
+noncomputable def U_LRC_Real (ρ ε σ rc  : ℝ) : ℝ :=
+  (8 * Real.pi * ρ * ε) * ((1/9) * (σ ^ 12 / rc ^ 9) - (1/3) * (σ ^ 6 / rc ^ 3))
+
+
 noncomputable def lj (r r_c ε σ : ℝ) : ℝ :=
     if r ≤ r_c then
       4 * ε * ((σ / r) ^ 12 - (σ / r) ^ 6)
