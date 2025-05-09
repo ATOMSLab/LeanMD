@@ -1,5 +1,8 @@
 import Lean
+
+import LeanLJ
 namespace LeanLJ
+
 /-!
   ## CSV Parser for Atomic Positions and User Input
 -/
