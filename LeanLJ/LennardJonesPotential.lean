@@ -1,16 +1,11 @@
 import Mathlib
+import LeanLJ
+import LeanLJ.Instance
+open LeanLJ
+namespace LeanLJ
 
-instance : Pow Float Nat where
-  pow := fun x n =>
-    let rec go (x : Float) (n : Nat) : Float :=
-      match n with
-      | 0 => 1.0
-      | k + 1 => x * go x k
-    go x n
 
-class LJCompatible (α : Type ) extends LinearOrderedField α, HPow α Nat α
-
-def lj_p {α : Type} [LJCompatible α] (r r_c ε σ : α) : α :=
+def lj_p {α : Type} [RealLike α] (r r_c ε σ : α) : α :=
   if r ≤ r_c then
     let r3 := (σ / r) ^ (3 : Nat)
     let r6 := r3 * r3
@@ -19,7 +14,7 @@ def lj_p {α : Type} [LJCompatible α] (r r_c ε σ : α) : α :=
   else
     0
 
-noncomputable def lj_real  (r r_c ε σ  : ℝ) : ℝ :=
+noncomputable def lj_Real  (r r_c ε σ  : ℝ) : ℝ :=
   if r ≤ r_c then
     let r3 := (σ / r) ^ (3 : Nat)
     let r6 := r3 * r3
@@ -28,7 +23,7 @@ noncomputable def lj_real  (r r_c ε σ  : ℝ) : ℝ :=
   else
     0
 
-def lj_float (r r_c ε σ : Float) : Float :=
+def lj_Float (r r_c ε σ : Float) : Float :=
     if r ≤ r_c then
       let r3 := (σ / r) ^ (3 : Nat)
       let r6 := r3 * r3
@@ -181,31 +176,31 @@ lemma differentiable_pow6_div (σ : ℝ) (hr : ∀ x : ℝ, x > 0) :
     exact absurd hx (ne_of_gt h_pos)
 
 theorem cutoff_behavior (r r_c ε σ : ℝ)
-    (h : r > r_c) : lj_real r r_c ε σ = 0 := by
-  unfold lj_real
+    (h : r > r_c) : lj_Real r r_c ε σ = 0 := by
+  unfold lj_Real
   simp [if_neg (not_le_of_gt h)]
 
 
 theorem ljp_zero_on_tail (r_c ε σ : ℝ) :
-  ∀ r, r > r_c → lj_real r r_c ε σ = 0 := by
+  ∀ r, r > r_c → lj_Real r r_c ε σ = 0 := by
   intro r h
-  unfold lj_real
+  unfold lj_Real
   simp only [if_neg (not_le_of_gt h)]
 
 
 theorem ljp_eq_le {r_c ε σ : ℝ} :
-  ∀ r ∈ {r | r > 0 ∧ r ≤ r_c }, lj_real r r_c ε σ = 4 * ε * ((σ / r)^12 - (σ / r)^6) := by
+  ∀ r ∈ {r | r > 0 ∧ r ≤ r_c }, lj_Real r r_c ε σ = 4 * ε * ((σ / r)^12 - (σ / r)^6) := by
   intro r hr
   have h_r_le_rc : r ≤ r_c := hr.2
-  unfold lj_real
+  unfold lj_Real
   rw [if_pos h_r_le_rc]
   ring
 
-theorem ljp_eq_gt (r_c ε σ  : ℝ) : ∀ r ∈ {r | r > r_c ∧ r > 0}, lj_real r r_c ε σ = 0 := by
+theorem ljp_eq_gt (r_c ε σ  : ℝ) : ∀ r ∈ {r | r > r_c ∧ r > 0}, lj_Real r r_c ε σ = 0 := by
   intro r hr
   have h_r_gt_rc : r > r_c := hr.1
   have h_r_pos : r > 0 := hr.2
-  unfold lj_real
+  unfold lj_Real
   rw [if_neg (not_le_of_gt h_r_gt_rc)]
 
 
@@ -267,4 +262,4 @@ theorem ljp_second_derivative (r_c ε σ : ℝ) :
     · apply DifferentiableOn.const_mul
       apply differentiable_on_zpow_neg8
 
-
+end LeanLJ
