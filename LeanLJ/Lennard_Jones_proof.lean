@@ -1,36 +1,10 @@
 import Mathlib
 import LeanLJ
 import LeanLJ.Instance
+import LeanLJ.Function
 open LeanLJ
 namespace LeanLJ
 
-
-def lj_p {α : Type} [RealLike α] (r r_c ε σ : α) : α :=
-  if r ≤ r_c then
-    let r3 := (σ / r) ^ (3 : Nat)
-    let r6 := r3 * r3
-    let r12 := r6 * r6
-    4 * ε * (r12 - r6)
-  else
-    0
-
-noncomputable def lj_Real  (r r_c ε σ  : ℝ) : ℝ :=
-  if r ≤ r_c then
-    let r3 := (σ / r) ^ (3 : Nat)
-    let r6 := r3 * r3
-    let r12 := r6 * r6
-    4 * ε * (r12 - r6)
-  else
-    0
-
-def lj_Float (r r_c ε σ : Float) : Float :=
-    if r ≤ r_c then
-      let r3 := (σ / r) ^ (3 : Nat)
-      let r6 := r3 * r3
-      let r12 := r6 * r6
-      4 * ε * (r12 - r6)
-    else
-      0
 
 lemma differentiable_at_zpow_neg12 (r : ℝ) (h : r ≠ 0) : DifferentiableAt ℝ (fun r ↦ r ^ (-12:ℤ )) r := by
   apply DifferentiableAt.zpow
