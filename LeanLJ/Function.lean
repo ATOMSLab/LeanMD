@@ -106,7 +106,7 @@ def pairs (n : Nat) : List (Nat × Nat) :=
     (List.range' (i + 1) (n - (i + 1))).map fun j => (i, j)
 
 
-def computeTotalEnergy (positions : List (Fin 3 → Float))
+def total_energy_pairs (positions : List (Fin 3 → Float))
     (boxLength : Fin 3 → Float)
     (cutoff ε σ : Float) : Float :=
   let n := positions.length
@@ -129,7 +129,7 @@ def total_energy_loop (positions : List (Fin 3 → Float))
     return energy
 
 
-def compute_total_energy (positions : List (Fin 3 → Float)) (box_length : Fin 3 → Float)
+def total_energy_recursive (positions : List (Fin 3 → Float)) (box_length : Fin 3 → Float)
     (cutoff ε σ : Float) : Float :=
   let num_atoms := positions.length
   let rec energy (i j : Nat) (acc : Float) : Float :=
