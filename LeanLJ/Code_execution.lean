@@ -23,7 +23,7 @@ def main : IO Unit := do
     let epsilon ← readSinglePositiveFloat "Enter epsilon value (e.g., 1.0):"
     let sigma ← readSinglePositiveFloat "Enter sigma value (e.g., 1.0):"
     let box_length ← readBoxLength "Enter box length (comma-separated, e.g., 8.0,8.0,8.0):"
-    let totalEnergy := computeTotalEnergy positions box_length cutoff epsilon sigma
+    let totalEnergy := total_energy_pairs positions box_length cutoff epsilon sigma
     let numAtoms := positions.length
 
     let boxSide := box_length ⟨0, by decide⟩
