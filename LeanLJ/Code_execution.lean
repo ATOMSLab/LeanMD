@@ -28,7 +28,7 @@ def main : IO Unit := do
 
     let boxSide := box_length ⟨0, by decide⟩
     let density := rho numAtoms.toFloat boxSide
-    let Ulrc := numAtoms.toFloat * U_LRC_Float density pi epsilon sigma cutoff
+    let Ulrc := numAtoms.toFloat * U_LRC density pi epsilon sigma cutoff
 
     stdout.putStrLn s!"The internal energy is: {totalEnergy}"
 
@@ -59,6 +59,4 @@ def main : IO Unit := do
     stdout.putStrLn s!"The total internal energy including long-range correction is: {totalEnergy + Ulrc}"
 
 
-
--- lake env lean Research/Code_execution.lean --run
 --lake env lean --run LeanLJ/Execution.lean
