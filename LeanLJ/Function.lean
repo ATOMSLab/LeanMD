@@ -40,10 +40,6 @@ def minImageDistance_Float (posA posB : Fin 3 → Float) (boxLength : Fin 3 → 
   let dz := pbc_Float (posB (2:Fin 3) - posA (2:Fin 3)) (boxLength (2:Fin 3))
   Float.sqrt (dx ^ (2 : Nat) + dy ^ (2 : Nat) + dz ^ (2 : Nat))
 
-def MinImageDistance {α : Type } [RealLike α] (boxLength posA posB : Fin 3 → α)  : α :=
-  let dist := fun i => pbc (posB i - posA i) (boxLength i)
-  HasSqrt.sqrt (Finset.univ.sum (fun i => (dist i) ^ (2 : Nat)))
-
 
 def lj_p {α : Type} [RealLike α] (r r_c ε σ : α) : α :=
   if r ≤ r_c then
